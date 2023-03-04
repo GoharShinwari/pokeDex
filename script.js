@@ -128,7 +128,7 @@ const fetchPokemons = async (generation) => {
       start = getStartIndex(gen);
       end = getEndIndex(gen);
     } else {
-      for (let i = 1; i <= 6; i++) {
+      for (let i = 1; i <= 9; i++) {
         const startIdx = getStartIndex(i);
         const endIdx = getEndIndex(i);
         

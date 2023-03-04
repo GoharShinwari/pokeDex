@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="shortcut icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Pok%C3%A9_Ball_icon.svg/2052px-Pok%C3%A9_Ball_icon.svg.png" />
+    <title>Pokédex</title>
+  </head>
+  <body>
+    <h1>Pokédex</h1>
+    <!-- Buttons to change what generation of pokemon to view. -->
+    <div id="gen-buttons">
+            <button class="tablinks" onclick="fetchPokemons(1)">Generation 1</button>
+            <button class="tablinks" onclick="fetchPokemons(2)">Generation 2</button>
+            <button class="tablinks" onclick="fetchPokemons(3)">Generation 3</button>
+            <button class="tablinks" onclick="fetchPokemons(4)">Generation 4</button>
+            <button class="tablinks" onclick="fetchPokemons(5)">Generation 5</button>
+            <button class="tablinks" onclick="fetchPokemons(6)">Generation 6</button>
+            <button class="tablinks" onclick="fetchPokemons(7)">Generation 7</button>
+            <button class="tablinks" onclick="fetchPokemons(8)">Generation 8</button>
+            <button class="tablinks" onclick="fetchPokemons(9)">Generation 9</button>
+          </div>
+        
+    <!-- Container for each pokemon-->
+    <div class="poke-container" id="poke-container"></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

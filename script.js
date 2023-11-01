@@ -3,6 +3,7 @@ const genButtons = document.getElementById('gen-buttons');
 // may need to update this number when more pokemon are added to the API 
 const pokemonCount = 1008; 
 
+
 // pokemon type colors
 const colors = {
   fire: '#FDDFDF',
@@ -60,10 +61,7 @@ const createPokemonCard = (pokemon) => {
   
     pokeContainer.appendChild(pokemonEl);
   }
-  
-const clearPokeContainer = () => {
-  pokeContainer.innerHTML = '';
-}
+
 
 // start of every generation, ex: gen 3 first pokemon would start at 252 (treecko). default = 1 (venusaur)
 const getStartIndex = (gen) => {
@@ -117,50 +115,57 @@ const getEndIndex = (gen) => {
   }
 }
 
-// fetches the pokemon from a specific generation and sorts them by their ID number when each button is clicked
-const fetchPokemons = async (generation) => {
-    clearPokeContainer();
-    let start = 1;
-    let end = pokemonCount;
-    
-    if (generation !== "all") {
-      const gen = parseInt(generation);
-      start = getStartIndex(gen);
-      end = getEndIndex(gen);
+// Cache for storing fetched Pokemon data
+const pokemonCache = new Map();
+
+const fetchAndDisplayPokemon = async (id) => {
+  try {
+    // Check if the Pokemon data is already in the cache
+    const cachedPokemon = pokemonCache.get(id);
+
+    if (cachedPokemon) {
+      createPokemonCard(cachedPokemon);
     } else {
-      for (let i = 1; i <= 9; i++) {
-        const startIdx = getStartIndex(i);
-        const endIdx = getEndIndex(i);
-        
-        for (let j = startIdx; j <= endIdx; j++) {
-          try {
-            const pokemon = await getPokemon(j);
-            createPokemonCard(pokemon);
-          } catch (error) {
-            console.error(`Failed to fetch Pokemon with ID ${j}:`, error);
-          }
-        }
+      const pokemon = await getPokemon(id);
+      createPokemonCard(pokemon);
+      // Cache the fetched Pokemon data
+      pokemonCache.set(id, pokemon);
+    }
+  } catch (error) {
+    console.error(`Failed to fetch Pokemon with ID ${id}:`, error);
+  }
+};
+
+const clearPokeContainer = () => {
+  pokeContainer.innerHTML = '';
+};
+
+const fetchPokemons = async (generation) => {
+  clearPokeContainer();
+  let start = 1;
+  let end = pokemonCount;
+
+  if (generation !== "all") {
+    const gen = parseInt(generation);
+    start = getStartIndex(gen);
+    end = getEndIndex(gen);
+  } else {
+    for (let i = 1; i <= 9; i++) {
+      const startIdx = getStartIndex(i);
+      const endIdx = getEndIndex(i);
+
+      for (let j = startIdx; j <= endIdx; j++) {
+        fetchAndDisplayPokemon(j);
       }
-      
-      return;
     }
 
-    const pokemons = [];
+    return;
+  }
 
-    for (let i = start; i <= end; i++) {
-      try {
-        const pokemon = await getPokemon(i);
-        pokemons.push(pokemon);
-      } catch (error) {
-        console.error(`Failed to fetch Pokemon with ID ${i}:`, error);
-      }
-    }
+  for (let i = start; i <= end; i++) {
+    fetchAndDisplayPokemon(i);
+  }
+};
 
-    pokemons.sort((a, b) => a.id - b.id);
-
-    pokemons.forEach(pokemon => createPokemonCard(pokemon));
-  };
-
-  // by default loads gen 1
-  fetchPokemons(1);
-  
+// by default loads gen 1
+fetchPokemons(1);
